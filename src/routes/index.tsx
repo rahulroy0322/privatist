@@ -1,17 +1,42 @@
-// import {ThemeToggle} from '@/components/ThemeToggle'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { type FC, useState } from 'react'
+import { HomeCTASection } from '@/components/home/cta'
+import { HomeFeatureSection } from '@/components/home/feature'
+import { HomeHeroSection } from '@/components/home/hero'
+import { useSettingsStore } from '@/stores/use-settings-store'
 
-import { createFileRoute } from '@tanstack/react-router'
-import { ModeToggle } from '@/components/mode-toggle'
-import { Button } from '@/components/ui/button'
+const HomePage: FC = () => {
+  const navigate = useNavigate()
+  const { setOnboardingComplete, loadDemoTasks } = useSettingsStore()
+  const [isLoading, setIsLoading] = useState(false)
 
-export const Route = createFileRoute('/')({ component: App })
+  const handleGetStarted = async () => {
+    setIsLoading(true)
+    try {
+      await setOnboardingComplete(true)
+      await loadDemoTasks()
+      navigate({ to: '/todos' })
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
-function App() {
   return (
-    <main className="">
-      <Button>testing</Button>
+    <main className="min-h-screen bg-background text-foreground">
+      <HomeHeroSection
+        handleGetStarted={handleGetStarted}
+        isLoading={isLoading}
+      />
 
-      <ModeToggle />
+      <HomeFeatureSection />
+
+      <HomeCTASection
+        handleGetStarted={handleGetStarted}
+        isLoading={isLoading}
+      />
     </main>
   )
 }
+const Route = createFileRoute('/')({ component: HomePage })
+
+export { Route }
