@@ -49,7 +49,7 @@ const HomeFeatureSection: FC = () => (
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {data.map(({ Icon, title, content }) => (
-          <Card>
+          <Card key={title}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Icon className="text-primary" />
