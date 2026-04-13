@@ -5,7 +5,7 @@ import {
   RiRefreshLine,
   RiSearchLine,
 } from '@remixicon/react'
-import { useEffect, useRef, useState, type FC } from 'react'
+import { type FC, useEffect, useRef, useState } from 'react'
 import { ModeToggle } from '@/components/mode-toggle'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -201,7 +201,4 @@ const AppHeader: FC<AppHeaderPropsType> = ({
   )
 }
 
-
-export {
-  AppHeader
-}
+export { AppHeader }

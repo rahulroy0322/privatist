@@ -1,18 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect, useState, type FC } from 'react'
+import { type FC, useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { Fab } from '@/components/fab'
 import { AppHeader } from '@/components/layout/app-header'
 import { Sidebar } from '@/components/layout/sidebar'
-import { Fab } from '@/components/fab'
-import { TaskModal } from '@/components/tasks/task-modal'
 import { TaskList } from '@/components/tasks/task-list'
-import { useTodoStore } from '@/stores/todo-store'
+import { TaskModal } from '@/components/tasks/task-modal'
 import type { TaskType } from '@/lib/types'
+import { useTodoStore } from '@/stores/todo-store'
 
-const TodosPage:FC = () => {
+const TodosPage: FC = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedTaskIds, setSelectedTaskIds] = useState<number[]>([])
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
   const [editingTask, setEditingTask] = useState<TaskType | null>(null)
 
@@ -55,12 +54,6 @@ const TodosPage:FC = () => {
     }
   }
 
-  const handleSelectTask = (id: number) => {
-    setSelectedTaskIds((prev) =>
-      prev.includes(id) ? prev.filter((taskId) => taskId !== id) : [...prev, id]
-    )
-  }
-
   const handleSearch = (query: string) => {
     setSearchQuery(query)
   }
@@ -101,7 +94,9 @@ const TodosPage:FC = () => {
           title: formData.title,
           description: formData.description || '',
           priority: formData.priority,
-          dueDate: formData.dueDate ? new Date(formData.dueDate).getTime() : null,
+          dueDate: formData.dueDate
+            ? new Date(formData.dueDate).getTime()
+            : null,
           projectId: formData.projectId || null,
           labelIds: formData.labelIds || [],
           completed: false,
@@ -222,9 +217,7 @@ const TodosPage:FC = () => {
                   filter={filter}
                   onDelete={handleDeleteTask}
                   onEdit={handleEditTask}
-                  onSelect={handleSelectTask}
                   onToggleComplete={handleToggleComplete}
-                  selectedTaskIds={selectedTaskIds}
                   tasks={filteredTasks()}
                 />
               )}
@@ -238,10 +231,10 @@ const TodosPage:FC = () => {
 
       {/* Task Modal */}
       <TaskModal
-        open={isTaskModalOpen}
         onOpenChange={setIsTaskModalOpen}
-        task={editingTask}
         onSubmit={handleTaskSubmit}
+        open={isTaskModalOpen}
+        task={editingTask}
       />
     </div>
   )

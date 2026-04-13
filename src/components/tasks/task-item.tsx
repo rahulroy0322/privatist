@@ -1,12 +1,18 @@
 import {
   RiCalendarLine,
   RiDeleteBinLine,
-  RiDragMove2Line,
   RiMoreLine,
   RiPencilLine,
 } from '@remixicon/react'
-import { format } from 'date-fns'
-import { useState, type FC } from 'react'
+import {
+  differenceInCalendarDays,
+  format,
+  isPast,
+  isToday,
+  isTomorrow,
+  startOfDay,
+} from 'date-fns'
+import { type FC, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -15,25 +21,76 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
 import type { TaskType } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { PriorityBadge } from './priority-badge'
+
+type TaskDatePropsType = Pick<TaskType, 'dueDate'>
+
+const TaskDate: FC<TaskDatePropsType> = ({ dueDate }) => {
+  const dateInfo = useMemo((): null | {
+    text: string
+    type: 'toDay' | 'tomorrow' | 'upComming' | 'overdue'
+    date: Date
+  } => {
+    if (!dueDate) {
+      return null
+    }
+    const date = new Date(dueDate)
+    const dueStart = startOfDay(date)
+
+    if (isToday(date)) {
+      return {
+        text: 'Today',
+        type: 'toDay',
+        date,
+      }
+    }
+    if (isTomorrow(date)) {
+      return { text: 'Tomorrow', type: 'tomorrow', date }
+    }
+
+    const diffDays = differenceInCalendarDays(date, new Date())
+    if (diffDays >= 0 && diffDays < 7) {
+      // Within next week, show day name
+      return { text: format(date, 'EEEE'), type: 'upComming', date }
+    }
+    // Further future or past
+    const isOverdue = isPast(dueStart) && !isToday(date)
+    return {
+      text: format(date, 'MMM d'),
+      type: isOverdue ? 'overdue' : 'upComming',
+      date,
+    }
+  }, [dueDate])
+
+  if (!dateInfo) {
+    return null
+  }
+
+  const { date, text, type } = dateInfo
+
+  return (
+    <time
+      aria-label={text}
+      className={cn('text-xs flex gap-1 items-center', {
+        'text-teal-600': type === 'toDay',
+        'text-amber-600': type === 'tomorrow',
+        'text-cyan-600': type === 'upComming',
+        'text-destructive': type === 'overdue',
+      })}
+      dateTime={date.toISOString()}
+    >
+      <RiCalendarLine className="size-3" />
+      <span>{text}</span>
+    </time>
+  )
+}
 
 type TaskItemPropsType = {
   task: TaskType
   onToggleComplete?: (id: number) => void
   onEdit?: (id: number) => void
   onDelete?: (id: number) => void
-  isSelected?: boolean
-  onSelect?: (id: number) => void
-  showDragHandle?: boolean
-  className?: string
 }
 
 const TaskItem: FC<TaskItemPropsType> = ({
@@ -41,168 +98,99 @@ const TaskItem: FC<TaskItemPropsType> = ({
   onToggleComplete,
   onEdit,
   onDelete,
-  isSelected = false,
-  onSelect,
-  showDragHandle = false,
-  className,
 }) => {
-  const [isHovered, setIsHovered] = useState(false)
+  const { dueDate, id, completed, priority, description, title } = task
 
   const handleToggle = () => {
-    if (onToggleComplete && task.id !== undefined) {
-      onToggleComplete(task.id)
+    if (onToggleComplete && id !== undefined) {
+      onToggleComplete(id)
     }
   }
 
   const handleEdit = () => {
-    if (onEdit && task.id !== undefined) {
-      onEdit(task.id)
+    if (onEdit && id !== undefined) {
+      onEdit(id)
     }
   }
 
   const handleDelete = () => {
-    if (onDelete && task.id !== undefined) {
-      onDelete(task.id)
+    if (onDelete && id !== undefined) {
+      onDelete(id)
     }
   }
-
-  const handleSelect = () => {
-    if (onSelect && task.id !== undefined) {
-      onSelect(task.id)
-    }
-  }
-
-  const dueDateText = task.dueDate
-    ? format(new Date(task.dueDate), 'MMM d')
-    : null
 
   return (
-    <div
+    <article
       className={cn(
-        'group flex items-center gap-3 rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent/50',
-        isSelected && 'ring-2 ring-ring',
-        className
+        'group flex gap-2 p-1 pl-2 w-full border-b last:border-b-0 border-l-3',
+        {
+          'border-l-destructive': priority === 1,
+          'border-l-amber-500': priority === 2,
+          'border-l-primary': priority === 3,
+          'border-l-muted': priority === 4,
+        }
       )}
-      onClick={handleSelect}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onDoubleClick={handleEdit}
     >
-      {/* Drag handle (only visible on hover) */}
-      {showDragHandle && (
-        <div
-          className={cn(
-            'cursor-grab text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100',
-            isHovered && 'opacity-100'
-          )}
-        >
-          <RiDragMove2Line size={16} />
-        </div>
-      )}
-
-      {/* Checkbox */}
       <Checkbox
-        checked={task.completed}
-        className="h-5 w-5 rounded-full border-2"
+        checked={completed}
+        className={cn('size-3 rounded-full bg-transparent ring', {
+          'text-destructive data-checked:bg-destructive!': priority === 1,
+          'text-amber-500 data-checked:bg-amber-500!': priority === 2,
+          'text-primary data-checked:bg-primary!': priority === 3,
+          'text-muted data-checked:bg-muted!': priority === 4,
+        })}
         onCheckedChange={handleToggle}
-        style={{
-          borderColor: task.completed ? 'transparent' : undefined,
-        }}
       />
-
-      {/* Task content */}
-      <div className="flex-1 space-y-1">
-        <div className="flex items-center gap-2">
-          <p
-            className={cn(
-              'text-sm font-medium',
-              task.completed && 'line-through text-muted-foreground'
-            )}
-          >
-            {task.title}
-          </p>
-          <PriorityBadge
-            priority={task.priority}
-            showLabel={false}
-          />
-        </div>
-        {task.description && (
-          <p className="text-xs text-muted-foreground line-clamp-1">
-            {task.description}
-          </p>
-        )}
-        <div className="flex items-center gap-2">
-          {dueDateText && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <RiCalendarLine size={12} />
-                    <span>{dueDateText}</span>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  Due {format(new Date(task.dueDate!), 'PPP')}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
-          {/* Placeholder for project/label badges */}
-        </div>
-      </div>
-
-      {/* Actions (visible on hover) */}
-      <div
-        className={cn(
-          'flex items-center gap-1 opacity-0 transition-opacity',
-          isHovered && 'opacity-100'
-        )}
-      >
-        <Button
-          className="h-7 w-7"
-          onClick={handleEdit}
-          size="icon"
-          variant="ghost"
+      <div className="grow">
+        <h3
+          className={cn('text-sm font-medium line-clamp-1', {
+            'line-through': completed,
+          })}
         >
-          <RiPencilLine size={14} />
-        </Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <Button
-                className="h-7 w-7"
-                size="icon"
-                variant="ghost"
-              >
-                <RiMoreLine size={14} />
-              </Button>
-            }
-          />
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={handleEdit}>
-              <RiPencilLine
-                className="mr-2"
-                size={14}
-              />
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="text-destructive focus:text-destructive"
-              onClick={handleDelete}
-            >
-              <RiDeleteBinLine
-                className="mr-2"
-                size={14}
-              />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          {title}
+        </h3>
+        {description ? (
+          <h4 className="text-xs text-muted-foreground line-clamp-1">
+            {description}
+          </h4>
+        ) : null}
+        <TaskDate dueDate={dueDate} />
       </div>
-    </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              className="h-7 w-7"
+              size="icon"
+              variant="ghost"
+            >
+              <RiMoreLine size={14} />
+            </Button>
+          }
+        />
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={handleEdit}>
+            <RiPencilLine
+              className="mr-2"
+              size={14}
+            />
+            Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="text-destructive focus:text-destructive"
+            onClick={handleDelete}
+          >
+            <RiDeleteBinLine
+              className="mr-2"
+              size={14}
+            />
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </article>
   )
 }
 
-
-export {
-  TaskItem
-}
+export { TaskItem }

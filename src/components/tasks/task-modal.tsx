@@ -5,7 +5,7 @@ import {
   RiHashtag,
 } from '@remixicon/react'
 import { format } from 'date-fns'
-import { useEffect, useState, type FC } from 'react'
+import { type FC, useEffect, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
@@ -34,7 +34,7 @@ import type { TaskType } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { PriorityBadge } from './priority-badge'
 
-type TaskModalPropsType= {
+type TaskModalPropsType = {
   open: boolean
   onOpenChange: (open: boolean) => void
   task?: TaskType | null
@@ -69,12 +69,12 @@ const mockLabels = [
   { id: 'meeting', name: 'Meeting', color: 'bg-indigo-500' },
 ]
 
-const  TaskModal:FC<TaskModalPropsType>=({
+const TaskModal: FC<TaskModalPropsType> = ({
   open,
   onOpenChange,
   task,
   onSubmit,
-})=> {
+}) => {
   const [formData, setFormData] = useState<TaskFormDataType>({
     title: '',
     description: '',
@@ -368,6 +368,4 @@ const  TaskModal:FC<TaskModalPropsType>=({
   )
 }
 
-export{
-  TaskModal
-}
+export { TaskModal }

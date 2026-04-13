@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils"
-import { Skeleton } from "@/components/ui/skeleton"
-import type { FC } from "react"
+import type { FC } from 'react'
+import { Skeleton } from '@/components/ui/skeleton'
+import { cn } from '@/lib/utils'
 
 type TaskSkeletonPropsType = {
   count?: number
@@ -28,7 +28,6 @@ const TaskSkeleton: FC<TaskSkeletonPropsType> = ({ count = 3, className }) => (
   </div>
 )
 
-
 const TaskListSkeleton: FC = () => (
   <div className="space-y-6 p-4">
     {/* Today section skeleton */}
@@ -49,6 +48,4 @@ const TaskListSkeleton: FC = () => (
   </div>
 )
 
-export {
-  TaskListSkeleton
-}
+export { TaskListSkeleton }
