@@ -78,7 +78,10 @@ const HomeHeroSection: FC<HomeHeroSectionPropsType> = ({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
         {data.map(({ Icon, content, title }) => (
-          <Card className="bg-transparent shadow-none ring ring-primary">
+          <Card
+            className="bg-transparent shadow-none ring ring-primary"
+            key={title}
+          >
             <CardHeader>
               <CardTitle>
                 <Icon className="size-12 text-primary mx-auto mb-4" />

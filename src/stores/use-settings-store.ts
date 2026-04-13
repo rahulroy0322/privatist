@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { db } from '@/lib/db'
-import type { Task } from '@/lib/types'
+import type { TaskType } from '@/lib/types'
 
 type SyncConfig = {
   enabled: boolean
@@ -11,17 +11,14 @@ type SyncConfig = {
 type SettingsState = {
   onboardingComplete: boolean
   syncConfig: SyncConfig | null
-  theme: 'light' | 'dark' | 'system'
   setOnboardingComplete: (complete: boolean) => Promise<void>
   setSyncConfig: (config: SyncConfig | null) => Promise<void>
-  setTheme: (theme: 'light' | 'dark' | 'system') => Promise<void>
   loadDemoTasks: () => Promise<void>
 }
 
 export const useSettingsStore = create<SettingsState>((set) => ({
   onboardingComplete: false,
   syncConfig: null,
-  theme: 'system',
 
   setOnboardingComplete: async (complete) => {
     set({ onboardingComplete: complete })
@@ -33,37 +30,39 @@ export const useSettingsStore = create<SettingsState>((set) => ({
     await db.settings.put({ key: 'syncConfig', value: config })
   },
 
-  setTheme: async (theme) => {
-    set({ theme })
-    await db.settings.put({ key: 'theme', value: theme })
-  },
-
   loadDemoTasks: async () => {
-    const demoTasks: Task[] = [
+    const now = Date.now()
+    const demoTasks: TaskType[] = [
       {
-        id: Date.now(),
+        id: now,
         title: 'Welcome to Privatist!',
         priority: 2,
-        dueDate: new Date().toISOString(),
+        dueDate: now,
         completed: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        createdAt: now,
+        updatedAt: now,
+        labelIds: [],
+        order: 0,
       },
       {
-        id: Date.now() + 1,
+        id: now + 1,
         title: 'Try completing this task',
         priority: 3,
         completed: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        createdAt: now,
+        updatedAt: now,
+        labelIds: [],
+        order: 1,
       },
       {
-        id: Date.now() + 2,
+        id: now + 2,
         title: 'Drag me to reorder',
         priority: 4,
         completed: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+        createdAt: now,
+        updatedAt: now,
+        labelIds: [],
+        order: 2,
       },
     ]
 
