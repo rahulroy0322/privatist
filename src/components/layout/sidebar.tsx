@@ -8,7 +8,7 @@ import {
   RiHashtag,
   RiHomeLine,
 } from '@remixicon/react'
-import { useState, type FC } from 'react'
+import { type FC, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -234,6 +234,4 @@ const Sidebar: FC<SidebarPropsType> = ({
   )
 }
 
-export {
-  Sidebar
-}
+export { Sidebar }

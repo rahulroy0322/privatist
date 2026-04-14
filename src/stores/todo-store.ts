@@ -243,7 +243,6 @@ export const useTodoStore = create<TodoStoreState>((set, get) => ({
       case 'no-date':
         filtered = filtered.filter((task) => !task.dueDate)
         break
-      case 'all':
       default:
         // Show all except completed? Usually show incomplete
         filtered = filtered.filter((task) => !task.completed)

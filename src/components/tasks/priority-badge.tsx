@@ -1,6 +1,7 @@
+// REMOVE!
+import type { FC } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import type { FC } from 'react'
 
 type PriorityType = 1 | 2 | 3 | 4
 
@@ -17,13 +18,15 @@ const priorityConfig = {
     bg: 'bg-destructive/10',
     text: 'text-destructive',
     border: 'border-destructive/30',
+    leftBorder: 'border-l-destructive',
   },
   2: {
     label: 'P2',
-    color: 'warning',
-    bg: 'bg-orange-500/10',
-    text: 'text-orange-600 dark:text-orange-500',
-    border: 'border-orange-500/30',
+    color: 'primary',
+    bg: 'bg-primary/10',
+    text: 'text-primary',
+    border: 'border-primary/30',
+    leftBorder: 'border-l-primary',
   },
   3: {
     label: 'P3',
@@ -31,6 +34,7 @@ const priorityConfig = {
     bg: 'bg-primary/10',
     text: 'text-primary',
     border: 'border-primary/30',
+    leftBorder: 'border-l-primary',
   },
   4: {
     label: 'P4',
@@ -38,6 +42,7 @@ const priorityConfig = {
     bg: 'bg-muted',
     text: 'text-muted-foreground',
     border: 'border-border',
+    leftBorder: 'border-l-muted',
   },
 } as const
 
@@ -78,7 +83,4 @@ const PriorityBadge: FC<PriorityBadgePropsType> = ({
   )
 }
 
-
-export {
-  PriorityBadge
-}
+export { PriorityBadge, priorityConfig }
