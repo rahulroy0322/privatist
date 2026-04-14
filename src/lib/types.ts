@@ -1,4 +1,4 @@
-type TaskType = {
+type TodoType = {
   id?: number
   title: string
   description?: string
@@ -6,12 +6,12 @@ type TaskType = {
   dueDate?: number | null
   completed: boolean
   projectId?: string | null
-  labelIds: string[]
+  // labelIds: string[]
   parentId?: string | null
-  order: number
+  // order: number
   createdAt: number
   updatedAt: number
-  completedAt?: number | null
+  // completedAt?: number | null
   syncedAt?: number | null
 }
 
@@ -46,4 +46,4 @@ type SettingType = {
   value: unknown
 }
 
-export type { LabelType, ProjectType, SettingType, SyncQueueItemType, TaskType }
+export type { LabelType, ProjectType, SettingType, SyncQueueItemType, TodoType }

@@ -1,61 +1,32 @@
-import {
-  RiCalendarLine,
-  RiCloseLine,
-  RiFolderLine,
-  RiHashtag,
-} from '@remixicon/react'
+import { RiCalendarLine } from '@remixicon/react'
 import { format } from 'date-fns'
-import { type FC, useEffect, useState } from 'react'
-import { Badge } from '@/components/ui/badge'
+import { type FC, type SubmitEvent, useMemo } from 'react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import type { TaskType } from '@/lib/types'
+import { SelectItem } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
-import { PriorityBadge } from './priority-badge'
-
-type TaskModalPropsType = {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  task?: TaskType | null
-  onSubmit: (data: TaskFormDataType) => void
-}
-
-type TaskFormDataType = {
-  title: string
-  description: string
-  priority: 1 | 2 | 3 | 4
-  dueDate: Date | null
-  projectId: string | null
-  labelIds: string[]
-}
-
-const priorityOptions = [
-  { value: 1, label: 'P1 - Critical', color: 'destructive' },
-  { value: 2, label: 'P2 - Alert', color: 'warning' },
-  { value: 3, label: 'P3 - Elevated', color: 'primary' },
-  { value: 4, label: 'P4 - Standby', color: 'muted' },
-]
+import { type CreateTaskInputType, createTaskSchema } from '@/schema/task'
+import {
+  closeTodoModel,
+  setTodoModelOpen,
+  useTodoModel,
+} from '@/stores/todo-model'
+import { addTodo, updateTodo } from '@/stores/todo-store'
+import { useAppForm, useFieldContext } from '../form/main'
+import { FormBase } from '../form/ui/base'
+import { PrioritySelect } from './priority-select'
 
 const mockProjects = [
   { id: 'personal', name: 'Personal', color: 'bg-blue-500' },
@@ -63,305 +34,173 @@ const mockProjects = [
   { id: 'shopping', name: 'Shopping', color: 'bg-purple-500' },
 ]
 
-const mockLabels = [
-  { id: 'important', name: 'Important', color: 'bg-red-500' },
-  { id: 'waiting', name: 'Waiting', color: 'bg-orange-500' },
-  { id: 'meeting', name: 'Meeting', color: 'bg-indigo-500' },
-]
+const DueDate: FC = () => {
+  const field = useFieldContext<number | null>()
 
-const TaskModal: FC<TaskModalPropsType> = ({
-  open,
-  onOpenChange,
-  task,
-  onSubmit,
-}) => {
-  const [formData, setFormData] = useState<TaskFormDataType>({
-    title: '',
-    description: '',
-    priority: 4,
-    dueDate: null,
-    projectId: null,
-    labelIds: [],
+  const date = field.state.value
+  const quickDueDates = useMemo(
+    () => [
+      { label: 'Today', date: new Date() },
+      { label: 'Tomorrow', date: new Date(Date.now() + 86400000) },
+      { label: 'Next week', date: new Date(Date.now() + 7 * 86400000) },
+      { label: 'No date', date: null },
+    ],
+    []
+  )
+
+  return (
+    <FormBase label={'Due Date'}>
+      <Popover>
+        <PopoverTrigger render={<Button variant={'outline'} />}>
+          <RiCalendarLine
+            className="size-4"
+            type="button"
+          />
+          <span className={cn('text-sm', { 'text-muted-foreground': !date })}>
+            {date ? format(new Date(date), 'MMM d, yyyy') : 'Pick a date'}
+          </span>
+        </PopoverTrigger>
+        <PopoverContent
+          align="start"
+          className="w-auto p-0"
+        >
+          <Calendar
+            autoFocus
+            mode="single"
+            onSelect={(date) => field.handleChange(date?.getTime() || null)}
+            selected={date ? new Date(date) : undefined}
+          />
+
+          <div className="grid grid-cols-3 gap-1">
+            {quickDueDates.map((quick) => (
+              <Button
+                key={quick.label}
+                onClick={() =>
+                  field.handleChange(quick.date?.getTime() || null)
+                }
+                size="xs"
+                type="button"
+                variant="ghost"
+              >
+                {quick.label}
+              </Button>
+            ))}
+          </div>
+        </PopoverContent>
+      </Popover>
+    </FormBase>
+  )
+}
+
+const TaskModal: FC = () => {
+  const { open, todo } = useTodoModel()
+
+  const {
+    AppField,
+    handleSubmit: submit,
+    reset,
+  } = useAppForm({
+    defaultValues: {
+      title: todo?.title || '',
+      description: todo?.description || undefined,
+      priority: todo?.priority || 4,
+      dueDate: todo?.dueDate || undefined,
+      projectId: todo?.parentId || undefined,
+      parentId: todo?.projectId || undefined,
+    } satisfies CreateTaskInputType as CreateTaskInputType,
+    validators: {
+      onSubmit: createTaskSchema,
+    },
+    onSubmit: async ({ value }) => {
+      try {
+        if (todo?.id) {
+          await updateTodo(todo.id, value)
+        } else {
+          await addTodo(value)
+        }
+
+        reset()
+        closeTodoModel()
+      } catch (e) {
+        let err: Error = e instanceof Error ? e : new Error(String(e))
+        toast.error(`Error(${err.name}): ${err.message}`)
+      }
+    },
   })
 
-  useEffect(() => {
-    if (task) {
-      setFormData({
-        title: task.title,
-        description: task.description || '',
-        priority: task.priority,
-        dueDate: task.dueDate ? new Date(task.dueDate) : null,
-        projectId: task.projectId || null,
-        labelIds: task.labelIds || [],
-      })
-    } else {
-      setFormData({
-        title: '',
-        description: '',
-        priority: 4,
-        dueDate: null,
-        projectId: null,
-        labelIds: [],
-      })
-    }
-  }, [task])
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
-    onSubmit(formData)
-    onOpenChange(false)
+    submit()
   }
-
-  const handlePriorityChange = (value: string | null) => {
-    if (value) {
-      setFormData({ ...formData, priority: parseInt(value) as 1 | 2 | 3 | 4 })
-    }
-  }
-
-  const handleProjectChange = (value: string | null) => {
-    setFormData({ ...formData, projectId: value || null })
-  }
-
-  const toggleLabel = (labelId: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      labelIds: prev.labelIds.includes(labelId)
-        ? prev.labelIds.filter((id) => id !== labelId)
-        : [...prev.labelIds, labelId],
-    }))
-  }
-
-  const quickDueDates = [
-    { label: 'Today', date: new Date() },
-    { label: 'Tomorrow', date: new Date(Date.now() + 86400000) },
-    { label: 'Next week', date: new Date(Date.now() + 7 * 86400000) },
-    { label: 'No date', date: null },
-  ]
 
   return (
     <Dialog
-      onOpenChange={onOpenChange}
+      onOpenChange={setTodoModelOpen}
       open={open}
     >
-      <DialogContent className="max-w-2xl">
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle>{task ? 'Edit Task' : 'Create New Task'}</DialogTitle>
+          <DialogTitle>{todo?.id ? 'Update' : 'Create New'} Todo</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-6 py-4">
-            {/* Title */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Title</label>
+
+        <form
+          className="space-y-5"
+          onSubmit={handleSubmit}
+        >
+          <AppField name="title">
+            {({ Input }) => (
               <Input
-                autoFocus
-                onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
-                }
-                placeholder="What needs to be done?"
-                required
-                value={formData.title}
+                description="What needs to be done?"
+                label="Todo"
+                placeholder="Read Geography Chapter 2 Page 15"
               />
-            </div>
+            )}
+          </AppField>
 
-            {/* Description */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Description</label>
+          <AppField name="description">
+            {({ Textarea }) => (
               <Textarea
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-                placeholder="Add details (optional)"
-                rows={3}
-                value={formData.description}
+                description="Add details..."
+                label="Description"
+                placeholder="Read Geography Page 15 make note no it"
               />
-            </div>
+            )}
+          </AppField>
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              {/* Priority */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Priority</label>
+          <div className="grid grid-cols-3 gap-2">
+            <AppField name="priority">
+              {() => <PrioritySelect label="Priority" />}
+            </AppField>
+
+            <AppField name="dueDate">{() => <DueDate />}</AppField>
+
+            <AppField name="projectId">
+              {({ Select }) => (
                 <Select
-                  onValueChange={handlePriorityChange}
-                  value={formData.priority.toString()}
+                  label="Project"
+                  placeholder="No Project"
                 >
-                  <SelectTrigger>
-                    <SelectValue>
-                      <div className="flex items-center gap-2">
-                        <PriorityBadge priority={formData.priority} />
-                        <span>
-                          {
-                            priorityOptions.find(
-                              (p) => p.value === formData.priority
-                            )?.label
-                          }
-                        </span>
-                      </div>
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {priorityOptions.map((option) => (
-                      <SelectItem
-                        key={option.value}
-                        value={option.value.toString()}
-                      >
-                        <div className="flex items-center gap-2">
-                          <PriorityBadge
-                            priority={option.value as 1 | 2 | 3 | 4}
-                          />
-                          <span>{option.label}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Due Date */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Due Date</label>
-                <div className="flex flex-col gap-2">
-                  <Popover>
-                    <PopoverTrigger>
-                      <Button
-                        className="justify-start"
-                        variant="outline"
-                      >
-                        <RiCalendarLine className="mr-2 size-4" />
-                        {formData.dueDate ? (
-                          format(formData.dueDate, 'PPP')
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      align="start"
-                      className="w-auto p-0"
+                  <SelectItem value={null}>No project</SelectItem>
+                  {mockProjects.map((project) => (
+                    <SelectItem
+                      className="transition-colors hover:bg-accent"
+                      key={project.id}
+                      value={project.id}
                     >
-                      <Calendar
-                        autoFocus
-                        mode="single"
-                        onSelect={(date) =>
-                          setFormData({ ...formData, dueDate: date || null })
-                        }
-                        selected={formData.dueDate || undefined}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <div className="flex flex-wrap gap-2">
-                    {quickDueDates.map((quick) => (
-                      <Button
-                        key={quick.label}
-                        onClick={() =>
-                          setFormData({ ...formData, dueDate: quick.date })
-                        }
-                        size="sm"
-                        type="button"
-                        variant="outline"
-                      >
-                        {quick.label}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Project */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Project</label>
-                <Select
-                  onValueChange={handleProjectChange}
-                  value={formData.projectId || ''}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="No project">
-                      {formData.projectId ? (
-                        <div className="flex items-center gap-2">
-                          <RiFolderLine className="size-4" />
-                          <span>
-                            {
-                              mockProjects.find(
-                                (p) => p.id === formData.projectId
-                              )?.name
-                            }
-                          </span>
-                        </div>
-                      ) : (
-                        'No project'
-                      )}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">No project</SelectItem>
-                    {mockProjects.map((project) => (
-                      <SelectItem
-                        key={project.id}
-                        value={project.id}
-                      >
-                        <div className="flex items-center gap-2">
-                          <div
-                            className={`size-2 rounded-full ${project.color}`}
-                          />
-                          <span>{project.name}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
+                      <div className="flex items-center gap-2">
+                        <div
+                          className={`size-2.5 rounded-full ${project.color}`}
+                        />
+                        <span>{project.name}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
                 </Select>
-              </div>
-
-              {/* Labels */}
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Labels</label>
-                <div className="flex flex-wrap gap-2">
-                  {mockLabels.map((label) => {
-                    const isSelected = formData.labelIds.includes(label.id)
-                    return (
-                      <Badge
-                        className={cn(
-                          'cursor-pointer gap-1',
-                          isSelected && 'border-transparent'
-                        )}
-                        key={label.id}
-                        onClick={() => toggleLabel(label.id)}
-                        style={{
-                          backgroundColor: isSelected
-                            ? label.color.replace('bg-', '')
-                            : undefined,
-                        }}
-                        variant={isSelected ? 'default' : 'outline'}
-                      >
-                        <RiHashtag className="size-3" />
-                        {label.name}
-                        {isSelected && (
-                          <RiCloseLine
-                            className="ml-1 size-3"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              toggleLabel(label.id)
-                            }}
-                          />
-                        )}
-                      </Badge>
-                    )
-                  })}
-                </div>
-              </div>
-            </div>
+              )}
+            </AppField>
           </div>
 
-          <DialogFooter>
-            <Button
-              onClick={() => onOpenChange(false)}
-              type="button"
-              variant="outline"
-            >
-              Cancel
-            </Button>
-            <Button type="submit">
-              {task ? 'Save Changes' : 'Create Task'}
-            </Button>
-          </DialogFooter>
+          <Button type="submit">Create Task</Button>
         </form>
       </DialogContent>
     </Dialog>
