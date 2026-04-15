@@ -105,8 +105,8 @@ const TaskModal: FC = () => {
       description: todo?.description || undefined,
       priority: todo?.priority || 4,
       dueDate: todo?.dueDate || undefined,
-      projectId: todo?.parentId || undefined,
-      parentId: todo?.projectId || undefined,
+      projectId: todo?.projectId || undefined,
+      parentId: todo?.parentId || undefined,
     } satisfies CreateTaskInputType as CreateTaskInputType,
     validators: {
       onSubmit: createTaskSchema,
