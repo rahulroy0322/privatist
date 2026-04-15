@@ -17,7 +17,7 @@ const ModeToggle: FC = () => {
       <DropdownMenuTrigger
         render={
           <Button
-            size="icon"
+            size="icon-sm"
             variant="outline"
           />
         }

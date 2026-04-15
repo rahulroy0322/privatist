@@ -9,39 +9,24 @@ import {
   EmptyTitle,
 } from '@/components/ui/empty'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import type { TaskType } from '@/lib/types'
+import type { TodoType } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { setTodoModelOpen } from '@/stores/todo-model'
 import { Button } from '../ui/button'
 import { TaskFlatList } from './task-flat-list'
 
-type TaskListFilterType =
-  | 'all'
-  | 'today'
-  | 'tomorrow'
-  | 'upcoming'
-  | 'completed'
-  | 'no-date'
-
 type TaskListPropsType = {
-  tasks: TaskType[]
-  onToggleComplete?: (id: number) => void
-  onEdit?: (id: number) => void
-  onDelete?: (id: number) => void
+  todos: TodoType[]
   className?: string
   emptyMessage?: string
-  filter?: TaskListFilterType
 }
 
 const TaskList: FC<TaskListPropsType> = ({
-  tasks,
-  onToggleComplete,
-  onEdit,
-  onDelete,
+  todos,
   className,
-  emptyMessage = 'No tasks yet',
-  filter = 'all',
+  emptyMessage = 'No todos yet',
 }) => {
-  const hasTasks = tasks.length > 0
+  const hasTasks = todos.length > 0
 
   return (
     <ScrollArea className={cn('h-full', className)}>
@@ -61,23 +46,11 @@ const TaskList: FC<TaskListPropsType> = ({
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
-              <Button>Add data</Button>
+              <Button onClick={() => setTodoModelOpen(true)}>Add data</Button>
             </EmptyContent>
           </Empty>
-        ) : filter === 'all' ? (
-          <TaskFlatList
-            onDelete={onDelete}
-            onEdit={onEdit}
-            onToggleComplete={onToggleComplete}
-            tasks={tasks}
-          />
         ) : (
-          <TaskFlatList
-            onDelete={onDelete}
-            onEdit={onEdit}
-            onToggleComplete={onToggleComplete}
-            tasks={tasks}
-          />
+          <TaskFlatList todos={todos} />
         )}
       </div>
     </ScrollArea>

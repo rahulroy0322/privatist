@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { db } from '@/lib/db'
-import type { TaskType } from '@/lib/types'
+import type { TodoType } from '@/lib/types'
 
 type SyncConfig = {
   enabled: boolean
@@ -32,7 +32,7 @@ export const useSettingsStore = create<SettingsState>((set) => ({
 
   loadDemoTasks: async () => {
     const now = Date.now()
-    const demoTasks: TaskType[] = [
+    const demoTasks: TodoType[] = [
       {
         id: now,
         title: 'Welcome to Privatist!',
@@ -41,8 +41,6 @@ export const useSettingsStore = create<SettingsState>((set) => ({
         completed: false,
         createdAt: now,
         updatedAt: now,
-        labelIds: [],
-        order: 0,
       },
       {
         id: now + 1,
@@ -51,8 +49,6 @@ export const useSettingsStore = create<SettingsState>((set) => ({
         completed: false,
         createdAt: now,
         updatedAt: now,
-        labelIds: [],
-        order: 1,
       },
       {
         id: now + 2,
@@ -61,11 +57,9 @@ export const useSettingsStore = create<SettingsState>((set) => ({
         completed: false,
         createdAt: now,
         updatedAt: now,
-        labelIds: [],
-        order: 2,
       },
     ]
 
-    await db.tasks.bulkAdd(demoTasks)
+    await db.todos.bulkAdd(demoTasks)
   },
 }))

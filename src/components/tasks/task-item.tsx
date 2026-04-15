@@ -21,12 +21,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import type { TaskType } from '@/lib/types'
+import type { TodoType } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { setTodoModelOpen, setTodotoEdit } from '@/stores/todo-model'
+import { deleteTodo, toggleTodo } from '@/stores/todo-store'
 
-type TaskDatePropsType = Pick<TaskType, 'dueDate'>
+type TodoDatePropsType = Pick<TodoType, 'dueDate'>
 
-const TaskDate: FC<TaskDatePropsType> = ({ dueDate }) => {
+const TodoDate: FC<TodoDatePropsType> = ({ dueDate }) => {
   const dateInfo = useMemo((): null | {
     text: string
     type: 'toDay' | 'tomorrow' | 'upComming' | 'overdue'
@@ -86,36 +88,27 @@ const TaskDate: FC<TaskDatePropsType> = ({ dueDate }) => {
   )
 }
 
-type TaskItemPropsType = {
-  task: TaskType
-  onToggleComplete?: (id: number) => void
-  onEdit?: (id: number) => void
-  onDelete?: (id: number) => void
+type TodoItemPropsType = {
+  todo: TodoType
 }
 
-const TaskItem: FC<TaskItemPropsType> = ({
-  task,
-  onToggleComplete,
-  onEdit,
-  onDelete,
-}) => {
-  const { dueDate, id, completed, priority, description, title } = task
+const TodoItem: FC<TodoItemPropsType> = ({ todo }) => {
+  const { dueDate, id, completed, priority, description, title } = todo
 
   const handleToggle = () => {
-    if (onToggleComplete && id !== undefined) {
-      onToggleComplete(id)
+    if (id !== undefined) {
+      toggleTodo(id)
     }
   }
 
   const handleEdit = () => {
-    if (onEdit && id !== undefined) {
-      onEdit(id)
-    }
+    setTodoModelOpen(true)
+    setTodotoEdit(todo)
   }
 
   const handleDelete = () => {
-    if (onDelete && id !== undefined) {
-      onDelete(id)
+    if (id !== undefined) {
+      deleteTodo(id)
     }
   }
 
@@ -155,7 +148,7 @@ const TaskItem: FC<TaskItemPropsType> = ({
             {description}
           </h4>
         ) : null}
-        <TaskDate dueDate={dueDate} />
+        <TodoDate dueDate={dueDate} />
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger
@@ -193,4 +186,4 @@ const TaskItem: FC<TaskItemPropsType> = ({
   )
 }
 
-export { TaskItem }
+export { TodoItem }
