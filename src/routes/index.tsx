@@ -15,7 +15,7 @@ const HomePage: FC = () => {
     try {
       await setOnboardingComplete(true)
       await loadDemoTasks()
-      navigate({ to: '/todos' })
+      navigate({ to: '/inbox' })
     } finally {
       setIsLoading(false)
     }

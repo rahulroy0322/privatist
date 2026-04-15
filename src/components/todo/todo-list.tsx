@@ -13,15 +13,19 @@ import type { TodoType } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { setTodoModelOpen } from '@/stores/todo-model'
 import { Button } from '../ui/button'
-import { TaskFlatList } from './task-flat-list'
+import {
+  TodoFlatList,
+  TodoFlatListSkeleton,
+  type TodoFlatListSkeletonPropsType,
+} from './todo-flat-list'
 
-type TaskListPropsType = {
+type TodoListPropsType = {
   todos: TodoType[]
   className?: string
   emptyMessage?: string
 }
 
-const TaskList: FC<TaskListPropsType> = ({
+const TodoList: FC<TodoListPropsType> = ({
   todos,
   className,
   emptyMessage = 'No todos yet',
@@ -50,11 +54,17 @@ const TaskList: FC<TaskListPropsType> = ({
             </EmptyContent>
           </Empty>
         ) : (
-          <TaskFlatList todos={todos} />
+          <TodoFlatList todos={todos} />
         )}
       </div>
     </ScrollArea>
   )
 }
 
-export { TaskList }
+const TodoListSkeleton: FC<TodoFlatListSkeletonPropsType> = (props) => (
+  <div className="space-y-6 p-4">
+    <TodoFlatListSkeleton {...props} />
+  </div>
+)
+
+export { TodoList, TodoListSkeleton }

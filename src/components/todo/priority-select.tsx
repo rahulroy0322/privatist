@@ -27,13 +27,16 @@ const PrioritySelect: FC<PrioritySelectPropsType> = ({
 
   const priority = field.state.value
 
+  const handleChange = (value: PriorityType | null) =>
+    field.handleChange(Number(value) as PriorityType)
+
   return (
     <FormBase
       description={description}
       label={label}
     >
       <Select
-        onValueChange={field.handleChange as () => void}
+        onValueChange={handleChange}
         value={field.state.value}
         {...props}
       >
@@ -42,15 +45,16 @@ const PrioritySelect: FC<PrioritySelectPropsType> = ({
           id={field.name}
           name={field.name}
           onBlur={field.handleBlur}
+          render={<PriorityText priority={priority} />}
         >
           <SelectValue>
-            {field.state.value && (
-              <div className="flex items-center gap-2">
-                <PriorityBadge priority={field.state.value} />
+            {priority ? (
+              <>
+                <PriorityBadge priority={priority} />
 
                 {priorityConfig[priority]}
-              </div>
-            )}
+              </>
+            ) : null}
           </SelectValue>
         </SelectTrigger>
         <SelectContent

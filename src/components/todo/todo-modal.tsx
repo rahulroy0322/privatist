@@ -92,7 +92,7 @@ const DueDate: FC = () => {
   )
 }
 
-const TaskModal: FC = () => {
+const TodoModal: FC = () => {
   const { open, todo } = useTodoModel()
 
   const {
@@ -207,4 +207,4 @@ const TaskModal: FC = () => {
   )
 }
 
-export { TaskModal }
+export { TodoModal }
