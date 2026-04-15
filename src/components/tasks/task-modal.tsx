@@ -200,7 +200,7 @@ const TaskModal: FC = () => {
             </AppField>
           </div>
 
-          <Button type="submit">Create Task</Button>
+          <Button type="submit">{todo?.id ? 'Update' : 'Create'} Task</Button>
         </form>
       </DialogContent>
     </Dialog>

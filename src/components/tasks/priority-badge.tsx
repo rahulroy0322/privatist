@@ -43,8 +43,8 @@ const PriorityText: FC<PriorityTextPropsType> = ({
       {
         'text-destructive bg-destructive/20': priority === 1,
         'bg-amber-500/20 text-amber-600': priority === 2,
-        'text-primary bg-pritext-primary/20': priority === 3,
-        'text-muted-foreground bg-mutext-muted-foreground/20': priority === 4,
+        'text-primary bg-primary/20': priority === 3,
+        'text-muted-foreground bg-muted-foreground/20': priority === 4,
       },
       className
     )}

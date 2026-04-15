@@ -70,7 +70,7 @@ const PrioritySelect: FC<PrioritySelectPropsType> = ({
               >
                 <PriorityBadge priority={Number(key) as PriorityType} />
 
-                {priorityConfig[key as unknown as keyof typeof priorityConfig]}
+                {priorityConfig[Number(key) as PriorityType]}
               </PriorityText>
             </SelectItem>
           ))}
