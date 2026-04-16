@@ -1,5 +1,6 @@
 import { RiInboxLine } from '@remixicon/react'
 import { type FC } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   Empty,
   EmptyContent,
@@ -12,7 +13,6 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import type { TodoType } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { setTodoModelOpen } from '@/stores/todo-model'
-import { Button } from '../ui/button'
 import {
   TodoFlatList,
   TodoFlatListSkeleton,

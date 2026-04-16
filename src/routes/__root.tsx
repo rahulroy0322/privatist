@@ -1,4 +1,5 @@
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { hotkeysDevtoolsPlugin } from '@tanstack/react-hotkeys-devtools'
 import { createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import type { FC, ReactNode } from 'react'
@@ -37,6 +38,7 @@ const RootLayout: FC<RootLayoutPropsType> = ({ children }) => (
             name: 'Tanstack Router',
             render: <TanStackRouterDevtoolsPanel />,
           },
+          hotkeysDevtoolsPlugin(),
         ]}
       />
       <Scripts />

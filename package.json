@@ -26,6 +26,8 @@
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-form": "^1.29.0",
+    "@tanstack/react-hotkeys": "^0.9.1",
+    "@tanstack/react-hotkeys-devtools": "^0.6.6",
     "@tanstack/react-router": "latest",
     "@tanstack/react-router-devtools": "latest",
     "@tanstack/react-router-ssr-query": "latest",
