@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { type FC, useCallback } from 'react'
-import { TodoListPageWrapper } from '@/components/layout/todo-list-page-wraper'
+import { TodoListPageWrapper } from '@/components/layout/todo-list-page-wrapper'
 import { TodoAccordion } from '@/components/todo/todo-accordion'
 import { TodoList, TodoListSkeleton } from '@/components/todo/todo-list'
 import { db } from '@/lib/db'

@@ -16,7 +16,7 @@ const HomeCTASection: FC<HomeCTASectionPropsType> = ({
       <Card className="border-primary/20">
         <CardHeader>
           <CardTitle className="text-2xl">
-            Ready to take control of your tasks?
+            Ready to take control of your todos?
           </CardTitle>
           <p className="text-muted-foreground">
             Join thousands who trust Privatist with their productivity.

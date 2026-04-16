@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/popover'
 import { SelectItem } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
-import { type CreateTaskInputType, createTaskSchema } from '@/schema/task'
+import { type CreateTodoInputType, createTodoSchema } from '@/schema/todo'
 import {
   closeTodoModel,
   setTodoModelOpen,
@@ -107,9 +107,9 @@ const TodoModal: FC = () => {
       dueDate: todo?.dueDate || undefined,
       projectId: todo?.projectId || undefined,
       parentId: todo?.parentId || undefined,
-    } satisfies CreateTaskInputType as CreateTaskInputType,
+    } satisfies CreateTodoInputType as CreateTodoInputType,
     validators: {
-      onSubmit: createTaskSchema,
+      onSubmit: createTodoSchema,
     },
     onSubmit: async ({ value }) => {
       try {
@@ -200,7 +200,7 @@ const TodoModal: FC = () => {
             </AppField>
           </div>
 
-          <Button type="submit">{todo?.id ? 'Update' : 'Create'} Task</Button>
+          <Button type="submit">{todo?.id ? 'Update' : 'Create'} Todo</Button>
         </form>
       </DialogContent>
     </Dialog>

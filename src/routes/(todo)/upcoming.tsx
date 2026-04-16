@@ -1,28 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { type FC, useCallback } from 'react'
-import { TodoListPageWrapper } from '@/components/layout/todo-list-page-wraper'
-import { TodoAccordion } from '@/components/todo/todo-accordion'
+import { TodoListPageWrapper } from '@/components/layout/todo-list-page-wrapper'
+import { OverDueTodos } from '@/components/todo/overdue'
 import { TodosComponent } from '@/components/todo/todo-render'
 import { getTodayRange } from '@/lib/date'
 import { db } from '@/lib/db'
-
-const OverDueTasks: FC = () => {
-  const query = useCallback(() => {
-    const { startOfDay } = getTodayRange()
-    return db.todos
-      .where('dueDate')
-      .below(startOfDay)
-      .and((todo) => !todo.completed)
-      .toArray()
-  }, [])
-
-  return (
-    <TodoAccordion
-      query={query}
-      title="Over Due"
-    />
-  )
-}
 
 const UpcomingPageList: FC = () => {
   const query = useCallback(() => {
@@ -35,7 +17,7 @@ const UpcomingPageList: FC = () => {
 
 const UpcomingPage: FC = () => (
   <TodoListPageWrapper title="Upcoming">
-    <OverDueTasks />
+    <OverDueTodos />
     <UpcomingPageList />
   </TodoListPageWrapper>
 )

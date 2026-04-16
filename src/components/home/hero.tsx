@@ -29,7 +29,7 @@ const data: FeatureDataType[] = [
   {
     Icon: RiCloudOffLine,
     title: 'Works Offline',
-    content: 'No internet? No problem. Your tasks are always accessible.',
+    content: 'No internet? No problem. Your todos are always accessible.',
   },
 ]
 
@@ -45,12 +45,12 @@ const HomeHeroSection: FC<HomeHeroSectionPropsType> = ({
   <section className="py-20 px-4 text-center">
     <div className="max-w-4xl mx-auto">
       <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-6">
-        <span className="block">Your tasks,</span>
+        <span className="block">Your todos,</span>
         <span className="block">your device,</span>
         <span className="block text-primary">your choice to sync.</span>
       </h1>
       <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
-        A privacy-first task manager that works 100% offline by default. Your
+        A privacy-first todo manager that works 100% offline by default. Your
         data stays on your device unless you choose to sync.
       </p>
 

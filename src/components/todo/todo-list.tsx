@@ -30,12 +30,12 @@ const TodoList: FC<TodoListPropsType> = ({
   className,
   emptyMessage = 'No todos yet',
 }) => {
-  const hasTasks = todos.length > 0
+  const hasTodos = todos.length > 0
 
   return (
     <ScrollArea className={cn('h-full', className)}>
       <div className="space-y-6 p-4">
-        {!hasTasks ? (
+        {!hasTodos ? (
           <Empty className="border">
             <EmptyHeader>
               <EmptyMedia
@@ -46,7 +46,7 @@ const TodoList: FC<TodoListPropsType> = ({
               </EmptyMedia>
               <EmptyTitle>{emptyMessage}</EmptyTitle>
               <EmptyDescription>
-                Create your first task to get started
+                Create your first todo to get started
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>

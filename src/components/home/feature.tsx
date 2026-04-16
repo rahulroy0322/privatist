@@ -31,7 +31,7 @@ const data: FeatureDataType[] = [
     Icon: RiCloudOffLine,
     title: 'Offline First',
     content:
-      'Privatist is designed to work without an internet connection. Your tasks are stored locally on your device using secure IndexedDB technology.',
+      'Privatist is designed to work without an internet connection. Your todos are stored locally on your device using secure IndexedDB technology.',
   },
   {
     Icon: RiLoopLeftLine,

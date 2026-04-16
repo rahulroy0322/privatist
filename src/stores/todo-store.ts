@@ -1,27 +1,27 @@
 import { db } from '@/lib/db'
 import type { TodoType } from '@/lib/types'
-import type { CreateTaskInputType } from '@/schema/task'
+import type { CreateTodoInputType } from '@/schema/todo'
 
-const addTodo = async (taskData: CreateTaskInputType) => {
+const addTodo = async (todoData: CreateTodoInputType) => {
     const now = Date.now()
-    const newTask: TodoType = {
-      ...taskData,
+    const newTodo: TodoType = {
+      ...todoData,
       createdAt: now,
       updatedAt: now,
       syncedAt: null,
       completed: false,
-      // labelIds: taskData.labelIds || [],
-      // order: taskData.order ?? 0,
+      // labelIds: todoData.labelIds || [],
+      // order: todoData.order ?? 0,
     }
-    return db.todos.add(newTask)
+    return db.todos.add(newTodo)
   },
   updateTodo = async (id: number, updates: Partial<TodoType>) => {
     const now = Date.now()
-    const updatedTask = {
+    const updatedTodo = {
       ...updates,
       updatedAt: now,
     }
-    return db.todos.update(id, updatedTask)
+    return db.todos.update(id, updatedTodo)
   },
   toggleTodo = async (id: number) => {
     const prev = await db.todos.get(id)
