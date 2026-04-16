@@ -1,7 +1,5 @@
-// REMOVE!
-
 import { RiFlag2Line } from '@remixicon/react'
-import type { FC, ReactNode } from 'react'
+import type { ComponentProps, FC, ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 type PriorityType = keyof typeof priorityConfig
@@ -28,17 +26,19 @@ const PriorityBadge: FC<PriorityBadgePropsType> = ({ priority }) => (
   />
 )
 
-type PriorityTextPropsType = PriorityBadgePropsType & {
-  children?: ReactNode
-  className?: string
-}
+type PriorityTextPropsType = PriorityBadgePropsType &
+  ComponentProps<'span'> & {
+    children?: ReactNode
+  }
 
 const PriorityText: FC<PriorityTextPropsType> = ({
   priority,
   className,
   children = priorityConfig[priority],
+  ...props
 }) => (
   <span
+    {...props}
     className={cn(
       {
         'text-destructive bg-destructive/20': priority === 1,

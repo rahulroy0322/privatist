@@ -13,25 +13,29 @@ import type { TodoType } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { setTodoModelOpen } from '@/stores/todo-model'
 import { Button } from '../ui/button'
-import { TaskFlatList } from './task-flat-list'
+import {
+  TodoFlatList,
+  TodoFlatListSkeleton,
+  type TodoFlatListSkeletonPropsType,
+} from './todo-flat-list'
 
-type TaskListPropsType = {
+type TodoListPropsType = {
   todos: TodoType[]
   className?: string
   emptyMessage?: string
 }
 
-const TaskList: FC<TaskListPropsType> = ({
+const TodoList: FC<TodoListPropsType> = ({
   todos,
   className,
   emptyMessage = 'No todos yet',
 }) => {
-  const hasTasks = todos.length > 0
+  const hasTodos = todos.length > 0
 
   return (
     <ScrollArea className={cn('h-full', className)}>
       <div className="space-y-6 p-4">
-        {!hasTasks ? (
+        {!hasTodos ? (
           <Empty className="border">
             <EmptyHeader>
               <EmptyMedia
@@ -42,7 +46,7 @@ const TaskList: FC<TaskListPropsType> = ({
               </EmptyMedia>
               <EmptyTitle>{emptyMessage}</EmptyTitle>
               <EmptyDescription>
-                Create your first task to get started
+                Create your first todo to get started
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
@@ -50,11 +54,17 @@ const TaskList: FC<TaskListPropsType> = ({
             </EmptyContent>
           </Empty>
         ) : (
-          <TaskFlatList todos={todos} />
+          <TodoFlatList todos={todos} />
         )}
       </div>
     </ScrollArea>
   )
 }
 
-export { TaskList }
+const TodoListSkeleton: FC<TodoFlatListSkeletonPropsType> = (props) => (
+  <div className="space-y-6 p-4">
+    <TodoFlatListSkeleton {...props} />
+  </div>
+)
+
+export { TodoList, TodoListSkeleton }

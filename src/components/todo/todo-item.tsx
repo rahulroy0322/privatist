@@ -21,6 +21,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Skeleton } from '@/components/ui/skeleton'
 import type { TodoType } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { setTodoModelOpen, setTodotoEdit } from '@/stores/todo-model'
@@ -186,4 +187,15 @@ const TodoItem: FC<TodoItemPropsType> = ({ todo }) => {
   )
 }
 
-export { TodoItem }
+const TodoItemSkeleton: FC = () => (
+  <div className="flex gap-2 p-1 pl-2 w-full border-b last:border-b-0 border-l-3">
+    <Skeleton className="size-4 rounded-full" />
+    <div className="grow space-y-1">
+      <Skeleton className="h-3 w-3/4" />
+      <Skeleton className="h-2 w-2/4" />
+      <Skeleton className="h-1.5 w-4" />
+    </div>
+  </div>
+)
+
+export { TodoItem, TodoItemSkeleton }

@@ -28,25 +28,22 @@ const links: SidebarItemType[] = [
   {
     Icon: RiInbox2Line,
     label: 'Inbox',
-    link: '/',
+    link: '/inbox',
   },
   {
     Icon: RiCalendarTodoLine,
     label: 'Today',
-    // TODO!
-    link: '/',
+    link: '/today',
   },
   {
     Icon: RiCalendarLine,
     label: 'Upcoming',
-    // TODO!
-    link: '/',
+    link: '/upcoming',
   },
   {
     Icon: RiCalendar2Line,
     label: 'Overdue',
-    // TODO!
-    link: '/',
+    link: '/overdue',
   },
   {
     Icon: RiLineChartLine,

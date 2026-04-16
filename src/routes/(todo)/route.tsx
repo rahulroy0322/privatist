@@ -1,9 +1,11 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import type { FC } from 'react'
+import { Fab } from '@/components/fab'
 import { AppHeader } from '@/components/layout/header'
 import { AppSidebar } from '@/components/sidebar/main'
-import { TaskModal } from '@/components/tasks/task-modal'
+import { TodoModal } from '@/components/todo/todo-modal'
 import { SidebarProvider } from '@/components/ui/sidebar'
+import { openTodoModel } from '@/stores/todo-model'
 
 const BaseLayout: FC = () => (
   <SidebarProvider>
@@ -14,11 +16,12 @@ const BaseLayout: FC = () => (
         <Outlet />
       </main>
     </div>
-    <TaskModal />
+    <TodoModal />
+    <Fab onClick={openTodoModel} />
   </SidebarProvider>
 )
 
-const Route = createFileRoute('/(base)')({
+const Route = createFileRoute('/(todo)')({
   component: BaseLayout,
 })
 

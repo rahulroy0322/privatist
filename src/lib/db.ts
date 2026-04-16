@@ -28,3 +28,36 @@ export class AppDB extends Dexie {
 }
 
 export const db = new AppDB()
+
+// loadDemoTasks: async () => {
+//     const now = Date.now()
+//     const demoTasks: TodoType[] = [
+//       {
+//         id: now,
+//         title: 'Welcome to Privatist!',
+//         priority: 2,
+//         dueDate: now,
+//         completed: false,
+//         createdAt: now,
+//         updatedAt: now,
+//       },
+//       {
+//         id: now + 1,
+//         title: 'Try completing this task',
+//         priority: 3,
+//         completed: false,
+//         createdAt: now,
+//         updatedAt: now,
+//       },
+//       {
+//         id: now + 2,
+//         title: 'Drag me to reorder',
+//         priority: 4,
+//         completed: false,
+//         createdAt: now,
+//         updatedAt: now,
+//       },
+//     ]
+
+//     await db.todos.bulkAdd(demoTasks)
+//   },

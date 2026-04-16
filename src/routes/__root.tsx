@@ -1,11 +1,50 @@
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+import type { FC, ReactNode } from 'react'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
-export const Route = createRootRoute({
+type RootLayoutPropsType = {
+  children: ReactNode
+}
+
+const RootLayout: FC<RootLayoutPropsType> = ({ children }) => (
+  <html
+    lang="en"
+    suppressHydrationWarning
+  >
+    <head>
+      <HeadContent />
+    </head>
+    <body className="font-sans antialiased">
+      <TooltipProvider>
+        <ThemeProvider>
+          {children}
+          <Toaster
+            closeButton
+            richColors
+          />
+        </ThemeProvider>
+      </TooltipProvider>
+      <TanStackDevtools
+        config={{
+          position: 'bottom-left',
+        }}
+        plugins={[
+          {
+            name: 'Tanstack Router',
+            render: <TanStackRouterDevtoolsPanel />,
+          },
+        ]}
+      />
+      <Scripts />
+    </body>
+  </html>
+)
+
+const Route = createRootRoute({
   head: () => ({
     meta: [
       {
@@ -20,41 +59,11 @@ export const Route = createRootRoute({
       },
     ],
   }),
-  shellComponent: RootDocument,
+  shellComponent: RootLayout as ({
+    children,
+  }: {
+    children: ReactNode
+  }) => ReactNode,
 })
 
-function RootDocument({ children }: { children: React.ReactNode }) {
-  return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-    >
-      <head>
-        <HeadContent />
-      </head>
-      <body className="font-sans antialiased">
-        <TooltipProvider>
-          <ThemeProvider>
-            {children}
-            <Toaster
-              closeButton
-              richColors
-            />
-          </ThemeProvider>
-        </TooltipProvider>
-        <TanStackDevtools
-          config={{
-            position: 'bottom-right',
-          }}
-          plugins={[
-            {
-              name: 'Tanstack Router',
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
-        <Scripts />
-      </body>
-    </html>
-  )
-}
+export { Route }

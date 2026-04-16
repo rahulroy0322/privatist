@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const createTaskSchema = z.object({
+const createTodoSchema = z.object({
   title: z
     .string()
     .min(1, 'Title is required')
@@ -16,7 +16,7 @@ const createTaskSchema = z.object({
   parentId: z.string().optional(),
 })
 
-// const taskSchema = z.object({
+// const TodoSchema = z.object({
 //     id: z.number().optional(),
 //     title: z.string().min(1).max(200),
 //     description: z.string().max(1000).optional(),
@@ -33,10 +33,10 @@ const createTaskSchema = z.object({
 //     syncedAt: z.union([z.number(), z.null()]).optional(),
 // })
 
-type CreateTaskInputType = z.infer<typeof createTaskSchema>
+type CreateTodoInputType = z.infer<typeof createTodoSchema>
 
-// type TaskSchema = z.infer<typeof taskSchema>
+// type TodoSchema = z.infer<typeof TodoSchema>
 
-export type { CreateTaskInputType }
+export type { CreateTodoInputType }
 
-export { createTaskSchema }
+export { createTodoSchema }
