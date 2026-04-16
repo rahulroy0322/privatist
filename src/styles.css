@@ -122,10 +122,23 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
+  }
+
+  img,
+  figure,
+  svg {
+    @apply size-full object-cover;
+  }
+
+  button,
+  [role="button"] {
+    @apply cursor-pointer;
   }
 }

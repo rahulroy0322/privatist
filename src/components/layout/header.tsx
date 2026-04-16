@@ -8,7 +8,6 @@ import { toggleCommandDialog } from '@/stores/command-dialog-store'
 const AppHeader: FC = () => {
   useHotkey('Mod+K', toggleCommandDialog, {
     meta: { name: 'Search', description: 'Open command palette' },
-    target: document,
   })
 
   return (
