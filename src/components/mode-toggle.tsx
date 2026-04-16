@@ -18,7 +18,7 @@ const ModeToggle: FC = () => {
         render={
           <Button
             size="icon-sm"
-            variant="outline"
+            variant="ghost"
           />
         }
       >

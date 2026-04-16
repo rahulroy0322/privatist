@@ -1,6 +1,6 @@
 import { RiFolderLine } from '@remixicon/react'
 import type { ComponentProps, FC } from 'react'
-import { SearchForm } from '@/components/sidebar/search-form'
+import { SearchToggle } from '@/components/command-dialog/command-toggle'
 import {
   Sidebar,
   SidebarContent,
@@ -20,8 +20,13 @@ const AppSidebar: FC<AppSidebarPropsType> = ({ ...props }) => (
         <RiFolderLine className="size-8 text-primary" />
         <span className="text-xl font-bold">Privatist</span>
       </SidebarMenuItem>
-      {/* TODO! */}
-      <SearchForm />
+      {/* <Button type='button' render={ */}
+      <SearchToggle
+        className={'gap-2 w-full'}
+        variant={'default'}
+      >
+        Serach
+      </SearchToggle>
     </SidebarHeader>
     <SidebarContent className="gap-0">
       <AppSidebarNav />

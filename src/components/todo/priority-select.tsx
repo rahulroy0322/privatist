@@ -1,4 +1,6 @@
 import type { FC } from 'react'
+import { useFieldContext } from '@/components/form/main'
+import { FormBase, type FormControllPropsType } from '@/components/form/ui/base'
 import {
   Select,
   SelectContent,
@@ -6,8 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useFieldContext } from '../form/main'
-import { FormBase, type FormControllPropsType } from '../form/ui/base'
 import {
   PriorityBadge,
   PriorityText,

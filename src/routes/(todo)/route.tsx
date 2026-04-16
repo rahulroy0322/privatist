@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import type { FC } from 'react'
+import { CommandDialogComponent } from '@/components/command-dialog/command-dialog'
 import { Fab } from '@/components/fab'
 import { AppHeader } from '@/components/layout/header'
 import { AppSidebar } from '@/components/sidebar/main'
@@ -17,6 +18,7 @@ const BaseLayout: FC = () => (
       </main>
     </div>
     <TodoModal />
+    <CommandDialogComponent />
     <Fab onClick={openTodoModel} />
   </SidebarProvider>
 )
