@@ -59,7 +59,8 @@ const Route = createRootRoute({
       },
     ],
   }),
-  shellComponent: RootLayout as ({}: { children: ReactNode }) => ReactNode,
+  // @ts-expect-error
+  shellComponent: RootLayout,
 })
 
 export { Route }

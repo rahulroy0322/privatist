@@ -1,5 +1,3 @@
-// REMOVE!
-
 import { RiFlag2Line } from '@remixicon/react'
 import type { ComponentProps, FC, ReactNode } from 'react'
 import { cn } from '@/lib/utils'
@@ -31,7 +29,6 @@ const PriorityBadge: FC<PriorityBadgePropsType> = ({ priority }) => (
 type PriorityTextPropsType = PriorityBadgePropsType &
   ComponentProps<'span'> & {
     children?: ReactNode
-    className?: string
   }
 
 const PriorityText: FC<PriorityTextPropsType> = ({

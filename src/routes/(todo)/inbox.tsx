@@ -1,12 +1,29 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { type FC } from 'react'
-import { TodoListPageWraper } from '@/components/layout/todo-list-page-wraper'
+import { type FC, useCallback } from 'react'
+import { TodoListPageWrapper } from '@/components/layout/todo-list-page-wraper'
+import { TodoAccordion } from '@/components/todo/todo-accordion'
 import { TodoList, TodoListSkeleton } from '@/components/todo/todo-list'
 import { db } from '@/lib/db'
 
+const CompletedTodos: FC = () => {
+  const query = useCallback(
+    () => db.todos.filter((todo) => todo.completed).toArray(),
+    []
+  )
+
+  return (
+    <TodoAccordion
+      query={query}
+      title="Completed"
+    />
+  )
+}
+
 const InboxPageList: FC = () => {
-  const todos = useLiveQuery(() => db.todos.toArray())
+  const todos = useLiveQuery(() =>
+    db.todos.filter((todo) => !todo.completed).toArray()
+  )
 
   if (!Array.isArray(todos)) {
     return <TodoListSkeleton />
@@ -16,9 +33,10 @@ const InboxPageList: FC = () => {
 }
 
 const InboxPage: FC = () => (
-  <TodoListPageWraper title="Inbox">
+  <TodoListPageWrapper title="Inbox">
+    <CompletedTodos />
     <InboxPageList />
-  </TodoListPageWraper>
+  </TodoListPageWrapper>
 )
 
 const Route = createFileRoute('/(todo)/inbox')({

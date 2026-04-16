@@ -1,11 +1,11 @@
 import { type FC, type ReactNode } from 'react'
 
-type TodoListPageWraperPropsType = {
+type TodoListPageWrapperPropsType = {
   children: ReactNode
   title: string
 }
 
-const TodoListPageWraper: FC<TodoListPageWraperPropsType> = ({
+const TodoListPageWrapper: FC<TodoListPageWrapperPropsType> = ({
   title,
   children,
 }) => (
@@ -17,4 +17,4 @@ const TodoListPageWraper: FC<TodoListPageWraperPropsType> = ({
   </div>
 )
 
-export { TodoListPageWraper }
+export { TodoListPageWrapper }

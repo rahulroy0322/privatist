@@ -1,38 +1,26 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useLiveQuery } from 'dexie-react-hooks'
-import { type FC, useCallback, useMemo } from 'react'
-import { TodoListPageWraper } from '@/components/layout/todo-list-page-wraper'
-import { TodoFlatList } from '@/components/todo/todo-flat-list'
-import { TodoListSkeleton } from '@/components/todo/todo-list'
+import { type FC, useCallback } from 'react'
+import { TodoListPageWrapper } from '@/components/layout/todo-list-page-wraper'
+import { TodoAccordion } from '@/components/todo/todo-accordion'
 import { TodosComponent } from '@/components/todo/todo-render'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
 import { getTodayRange } from '@/lib/date'
 import { db } from '@/lib/db'
 
 const OverDueTasks: FC = () => {
-  const { startOfDay } = useMemo(() => getTodayRange(), [])
-  const todos = useLiveQuery(() =>
-    db.todos.where('dueDate').below(startOfDay).toArray()
-  )
+  const query = useCallback(() => {
+    const { startOfDay } = getTodayRange()
+    return db.todos
+      .where('dueDate')
+      .below(startOfDay)
+      .and((todo) => !todo.completed)
+      .toArray()
+  }, [])
 
   return (
-    <Accordion className="border-0 py-0">
-      <AccordionItem className="bg-transparent!">
-        <AccordionTrigger>Over Due ({todos?.length})</AccordionTrigger>
-        <AccordionContent>
-          {!Array.isArray(todos) ? (
-            <TodoListSkeleton />
-          ) : (
-            <TodoFlatList todos={todos} />
-          )}
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+    <TodoAccordion
+      query={query}
+      title="Over Due"
+    />
   )
 }
 
@@ -46,10 +34,10 @@ const UpcomingPageList: FC = () => {
 }
 
 const UpcomingPage: FC = () => (
-  <TodoListPageWraper title="Upcoming">
+  <TodoListPageWrapper title="Upcoming">
     <OverDueTasks />
     <UpcomingPageList />
-  </TodoListPageWraper>
+  </TodoListPageWrapper>
 )
 
 const Route = createFileRoute('/(todo)/upcoming')({
