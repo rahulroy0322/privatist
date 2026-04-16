@@ -3,9 +3,9 @@ import type { FC } from 'react'
 import { Button } from '@/components/ui/button'
 import { toggleCommandDialog } from '@/stores/command-dialog-store'
 
-type SerachTogglePropsType = Parameters<typeof Button>[0]
+type SearchTogglePropsType = Parameters<typeof Button>[0]
 
-const SerachToggle: FC<SerachTogglePropsType> = (props) => (
+const SearchToggle: FC<SearchTogglePropsType> = (props) => (
   <Button
     {...props}
     aria-label="Search todos"
@@ -18,4 +18,4 @@ const SerachToggle: FC<SerachTogglePropsType> = (props) => (
   </Button>
 )
 
-export { SerachToggle }
+export { SearchToggle }

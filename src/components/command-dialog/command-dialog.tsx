@@ -16,6 +16,7 @@ import {
   setOpenCommandDialog,
   useCommandDialogStore,
 } from '@/stores/command-dialog-store'
+import { toggleTodo } from '@/stores/todo-store'
 
 const CommandDialogEmptyState: FC = () => (
   <CommandEmpty>
@@ -41,6 +42,7 @@ const CommandDialogTodosState: FC<CommandDialogTodosStatePropsType> = ({
       <CommandItem
         className="border-b-primary border-b last:border-b-0"
         key={todo.id}
+        onSelect={() => toggleTodo(todo.id!)}
       >
         <TodoItem todo={todo} />
         <span className="sr-only">
