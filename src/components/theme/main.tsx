@@ -1,4 +1,5 @@
 import { RiMoonLine, RiSunLine } from '@remixicon/react'
+import { useHotkey } from '@tanstack/react-hotkeys'
 import type { FC } from 'react'
 import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
@@ -18,6 +19,24 @@ const setTheme = (theme: ThemeType) => {
 
 const ModeWrapper: FC = () => {
   const { theme } = useTheme()
+
+  useHotkey(
+    'Mod+Shift+T',
+    (e) => {
+      e.preventDefault()
+      const themes: ThemeType[] = ['light', 'dark', 'system']
+      const currentIndex = themes.indexOf(theme)
+      const nextTheme = themes[(currentIndex + 1) % themes.length]
+      setTheme(nextTheme)
+    },
+    {
+      meta: {
+        name: 'Toggle Theme',
+        description: 'Cycle through light, dark, and system themes',
+      },
+    }
+  )
+
   useEffect(() => {
     const root = window.document.documentElement
 

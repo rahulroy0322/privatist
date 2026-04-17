@@ -52,7 +52,7 @@ const HomeFeatureSection: FC = () => (
           <Card key={title}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Icon className="text-primary" />
+                <Icon className="text-primary size-5" />
                 {title}
               </CardTitle>
             </CardHeader>
