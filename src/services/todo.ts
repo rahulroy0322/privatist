@@ -1,17 +1,16 @@
 import { db } from '@/lib/db'
-import type { TodoType } from '@/lib/types'
 import type { CreateTodoInputType } from '@/schema/todo'
+import type { TodoType } from '@/types'
 
 const addTodo = async (todoData: CreateTodoInputType) => {
     const now = Date.now()
     const newTodo: TodoType = {
       ...todoData,
+      id: now,
       createdAt: now,
       updatedAt: now,
       syncedAt: null,
       completed: false,
-      // labelIds: todoData.labelIds || [],
-      // order: todoData.order ?? 0,
     }
     return db.todos.add(newTodo)
   },

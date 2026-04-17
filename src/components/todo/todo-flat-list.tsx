@@ -1,5 +1,5 @@
 import { type FC } from 'react'
-import type { TodoType } from '@/lib/types'
+import type { TodoType } from '@/types'
 import { TodoItem, TodoItemSkeleton } from './todo-item'
 
 type TodoFlatListPropsType = {

@@ -1,5 +1,3 @@
-'use client'
-
 import {
   RiCheckboxCircleLine,
   RiCloseCircleLine,
@@ -7,11 +5,11 @@ import {
   RiInformationLine,
   RiLoaderLine,
 } from '@remixicon/react'
-import { useTheme } from 'next-themes'
 import { Toaster as Sonner, type ToasterProps } from 'sonner'
+import { useTheme } from '@/hooks/use-theme'
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = 'system' } = useTheme()
+  const { theme } = useTheme()
 
   return (
     <Sonner
@@ -31,7 +29,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
           '--border-radius': 'var(--radius)',
         } as React.CSSProperties
       }
-      theme={theme as ToasterProps['theme']}
+      theme={(theme || 'system') as ToasterProps['theme']}
       toastOptions={{
         classNames: {
           toast: 'cn-toast',

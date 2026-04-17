@@ -10,9 +10,9 @@ import {
   EmptyTitle,
 } from '@/components/ui/empty'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import type { TodoType } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { setTodoModelOpen } from '@/stores/todo-model'
+import type { TodoType } from '@/types'
 import {
   TodoFlatList,
   TodoFlatListSkeleton,

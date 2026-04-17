@@ -1,7 +1,7 @@
 import { useHotkey } from '@tanstack/react-hotkeys'
 import type { FC } from 'react'
 import { SearchToggle } from '@/components/command-dialog/command-toggle'
-import { ModeToggle } from '@/components/mode-toggle'
+import { ModeToggle } from '@/components/theme/main'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { toggleCommandDialog } from '@/stores/command-dialog-store'
 
