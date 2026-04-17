@@ -8,7 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import type { TodoType } from '@/lib/types'
+import type { TodoType } from '@/types'
 
 type TodoAccordionPropsType = {
   title: string

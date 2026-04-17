@@ -11,12 +11,12 @@ import {
   CommandList,
 } from '@/components/ui/command'
 import { useSearchTodos } from '@/hooks/use-search-todos'
-import type { TodoType } from '@/lib/types'
+import { toggleTodo } from '@/services/todo'
 import {
   setOpenCommandDialog,
   useCommandDialogStore,
 } from '@/stores/command-dialog-store'
-import { toggleTodo } from '@/stores/todo-store'
+import type { TodoType } from '@/types'
 
 const CommandDialogEmptyState: FC = () => (
   <CommandEmpty>

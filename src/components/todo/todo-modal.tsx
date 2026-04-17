@@ -20,12 +20,12 @@ import {
 import { SelectItem } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
 import { type CreateTodoInputType, createTodoSchema } from '@/schema/todo'
+import { addTodo, updateTodo } from '@/services/todo'
 import {
   closeTodoModel,
   setTodoModelOpen,
   useTodoModel,
 } from '@/stores/todo-model'
-import { addTodo, updateTodo } from '@/stores/todo-store'
 import { PrioritySelect } from './priority-select'
 
 const mockProjects = [

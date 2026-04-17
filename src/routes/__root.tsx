@@ -3,7 +3,7 @@ import { hotkeysDevtoolsPlugin } from '@tanstack/react-hotkeys-devtools'
 import { createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import type { FC, ReactNode } from 'react'
-import { ThemeProvider } from '@/components/theme-provider'
+import { ModeWrapper } from '@/components/theme/main'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
@@ -21,13 +21,12 @@ const RootLayout: FC<RootLayoutPropsType> = ({ children }) => (
     </head>
     <body className="font-sans antialiased">
       <TooltipProvider>
-        <ThemeProvider>
-          {children}
-          <Toaster
-            closeButton
-            richColors
-          />
-        </ThemeProvider>
+        <ModeWrapper />
+        {children}
+        <Toaster
+          closeButton
+          richColors
+        />
       </TooltipProvider>
       <TanStackDevtools
         config={{

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { TodoType } from '@/lib/types'
+import type { TodoType } from '@/types'
 
 type TodoModelStoreType = {
   open: boolean

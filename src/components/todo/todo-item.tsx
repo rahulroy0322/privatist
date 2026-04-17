@@ -22,10 +22,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
-import type { TodoType } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { deleteTodo, toggleTodo } from '@/services/todo'
 import { setTodoModelOpen, setTodotoEdit } from '@/stores/todo-model'
-import { deleteTodo, toggleTodo } from '@/stores/todo-store'
+import type { TodoType } from '@/types'
 
 type TodoDatePropsType = Pick<TodoType, 'dueDate'>
 
