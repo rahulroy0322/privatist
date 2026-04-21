@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router'
 import { differenceInCalendarDays, isPast, isToday, isTomorrow } from 'date-fns'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { type FC, useCallback, useMemo, useState } from 'react'
+import { type FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import type { FilterType } from '@/components/project/filter-dropdown'
 import { FilterSortBar } from '@/components/project/filter-sort-bar'
@@ -147,6 +147,13 @@ const ProjectDetailPage: FC = () => {
     return sorted
   }, [filteredTodos, sort])
 
+  useEffect(() => {
+    if (projectResult !== undefined && projectResult.length === 0) {
+      toast.error('Project not found')
+      navigate({ to: '/project' })
+    }
+  }, [navigate, projectResult])
+
   // Show loading state
   if (projectResult === undefined || todos === undefined) {
     return (
@@ -165,10 +172,7 @@ const ProjectDetailPage: FC = () => {
     )
   }
 
-  // Redirect if project not found (data loaded but project array is empty)
-  if (projectResult !== undefined && projectResult.length === 0) {
-    toast.error('Project not found')
-    navigate({ to: '/project' })
+  if (!project) {
     return null
   }
 
@@ -207,7 +211,7 @@ const ProjectDetailPage: FC = () => {
         onDeleteSuccess={handleDeleteSuccess}
         onOpenChange={setDeleteDialogOpen}
         open={deleteDialogOpen}
-        project={project!}
+        project={project}
       />
     </>
   )
