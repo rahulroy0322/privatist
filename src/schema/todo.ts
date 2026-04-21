@@ -11,9 +11,9 @@ const createTodoSchema = z.object({
     .optional(),
   priority: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]),
   dueDate: z.number().optional(),
-  projectId: z.string().optional(),
+  projectId: z.number().optional(),
   // labelIds: z.array(z.string()).default([]),
-  parentId: z.string().optional(),
+  parentId: z.number().optional(),
 })
 
 // const TodoSchema = z.object({

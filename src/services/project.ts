@@ -1,9 +1,7 @@
 import { db } from '@/lib/db'
 import type { ProjectType } from '@/types'
 
-const addProject = async (
-    projectData: Pick<ProjectType, 'name' | 'id' | 'icon'>
-  ) => {
+const addProject = async (projectData: Pick<ProjectType, 'name' | 'icon'>) => {
     const now = Date.now()
     const newProject: ProjectType = {
       ...projectData,

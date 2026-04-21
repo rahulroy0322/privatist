@@ -1,5 +1,6 @@
 import { RiCalendarLine } from '@remixicon/react'
 import { format } from 'date-fns'
+import { useLiveQuery } from 'dexie-react-hooks'
 import { type FC, type SubmitEvent, useMemo } from 'react'
 import { toast } from 'sonner'
 import { useAppForm, useFieldContext } from '@/components/form/main'
@@ -18,6 +19,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { SelectItem } from '@/components/ui/select'
+import { db } from '@/lib/db'
 import { cn } from '@/lib/utils'
 import { type CreateTodoInputType, createTodoSchema } from '@/schema/todo'
 import { addTodo, updateTodo } from '@/services/todo'
@@ -27,12 +29,6 @@ import {
   useTodoModel,
 } from '@/stores/todo-model'
 import { PrioritySelect } from './priority-select'
-
-const mockProjects = [
-  { id: 'personal', name: 'Personal', color: 'bg-blue-500' },
-  { id: 'work', name: 'Work', color: 'bg-green-500' },
-  { id: 'shopping', name: 'Shopping', color: 'bg-purple-500' },
-]
 
 const DueDate: FC = () => {
   const field = useFieldContext<number | null>()
@@ -94,6 +90,9 @@ const DueDate: FC = () => {
 
 const TodoModal: FC = () => {
   const { open, todo } = useTodoModel()
+
+  // Fetch all projects from database
+  const projects = useLiveQuery(() => db.projects.toArray(), [])
 
   const {
     AppField,
@@ -181,16 +180,16 @@ const TodoModal: FC = () => {
                   placeholder="No Project"
                 >
                   <SelectItem value={null}>No project</SelectItem>
-                  {mockProjects.map((project) => (
+                  {projects?.map((project) => (
                     <SelectItem
                       className="transition-colors hover:bg-accent"
                       key={project.id}
                       value={project.id}
                     >
                       <div className="flex items-center gap-2">
-                        <div
-                          className={`size-2.5 rounded-full ${project.color}`}
-                        />
+                        {project.icon && (
+                          <span className="text-sm">{project.icon}</span>
+                        )}
                         <span>{project.name}</span>
                       </div>
                     </SelectItem>
