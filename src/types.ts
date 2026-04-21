@@ -7,9 +7,9 @@ type TodoType = {
   priority: 1 | 2 | 3 | 4
   dueDate?: number | null
   completed: boolean
-  projectId?: string | null
+  projectId?: number | null
   // labelIds: string[]
-  parentId?: string | null
+  parentId?: number | null
   // order: number
   createdAt: number
   updatedAt: number
