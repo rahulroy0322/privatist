@@ -1,6 +1,7 @@
 import { RiArrowRightSLine } from '@remixicon/react'
 import { Link, useLocation } from '@tanstack/react-router'
-import type { FC } from 'react'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { type FC } from 'react'
 import {
   Collapsible,
   CollapsibleContent,
@@ -14,40 +15,23 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
+import { db } from '@/lib/db'
 
 const AppSidebarProjectsImpl: FC = () => {
   const { pathname } = useLocation()
-
-  const projects = [
-    {
-      id: `home-1234-abcd-xyz`,
-      name: 'Home',
-      icon: '🏡',
-    },
-    {
-      id: `project-1-1234-abcd-xyz`,
-      name: 'Project 1',
-      icon: '📽️',
-    },
-    {
-      id: `project-2-1234-abcd-xyz`,
-      name: 'Project 2',
-      icon: '🎯',
-    },
-  ]
+  const projects = useLiveQuery(() => db.projects.toArray(), [])
 
   return (
     <SidebarMenu>
-      {projects.map(({ id, icon, name }) => (
+      {projects?.map(({ id, icon, name }) => (
         <SidebarMenuItem key={id || name}>
           <SidebarMenuButton
             isActive={pathname === `/project/${id}`}
             render={
               <Link
                 params={{
-                  id,
+                  id: String(id),
                 }}
-                // TODO!
                 to={`/project/$id`}
               />
             }

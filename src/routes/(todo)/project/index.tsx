@@ -133,9 +133,7 @@ const ProjectsPage: FC = () => {
 
   return (
     <div className="container mx-auto p-5">
-      <h2 className="sticky z-40 top-0 bg-background container mx-auto px-5 py-2">
-        Projects
-      </h2>
+      <h2 className="sticky z-40 top-0 bg-background py-2">Projects</h2>
 
       <ProjectSearchBar
         filterType={filterType}
