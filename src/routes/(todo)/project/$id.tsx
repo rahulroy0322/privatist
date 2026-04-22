@@ -12,6 +12,8 @@ import type { SortType } from '@/components/project/sort-dropdown'
 import { TodoList } from '@/components/todo/todo-list'
 import { Skeleton } from '@/components/ui/skeleton'
 import { db } from '@/lib/db'
+import { setTodoModelOpen, setTodotoEdit } from '@/stores/todo-model'
+import type { TodoType } from '@/types'
 
 const ProjectDetailPage: FC = () => {
   const { id } = useParams({ from: '/(todo)/project/$id' })
@@ -199,6 +201,13 @@ const ProjectDetailPage: FC = () => {
               ? 'No tasks in this project yet'
               : 'No tasks match your filters'
           }
+          openTodoModel={() => {
+            // to not show update todo form and pre fill project id
+            setTodotoEdit({
+              projectId: Number(id),
+            } as unknown as TodoType)
+            setTodoModelOpen(true)
+          }}
           todos={sortedTodos}
         />
       </div>
