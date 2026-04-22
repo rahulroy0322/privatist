@@ -44,8 +44,38 @@ const loadDemoTodos = async () => {
   await db.todos.bulkAdd(demoTodos)
 }
 
+const loadDefaultProjects = async () => {
+  const now = Date.now()
+  const defaultProjects = [
+    {
+      id: 1,
+      name: 'Personal',
+      icon: '🏡',
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: 2,
+      name: 'Work',
+      icon: '💼',
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: 3,
+      name: 'Learning',
+      icon: '📚',
+      createdAt: now,
+      updatedAt: now,
+    },
+  ]
+
+  await db.projects.bulkAdd(defaultProjects)
+}
+
 const completeOnboarding = async () => {
   await loadDemoTodos()
+  await loadDefaultProjects()
   await db.settings.put({ key: 'onboarding', value: true })
 }
 
