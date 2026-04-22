@@ -19,16 +19,20 @@ import {
   type TodoFlatListSkeletonPropsType,
 } from './todo-flat-list'
 
+const _openTodoModel = () => setTodoModelOpen(true)
+
 type TodoListPropsType = {
   todos: TodoType[]
   className?: string
   emptyMessage?: string
+  openTodoModel?: () => void
 }
 
 const TodoList: FC<TodoListPropsType> = ({
   todos,
   className,
   emptyMessage = 'No todos yet',
+  openTodoModel = _openTodoModel,
 }) => {
   const hasTodos = todos.length > 0
 
@@ -50,7 +54,7 @@ const TodoList: FC<TodoListPropsType> = ({
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
-              <Button onClick={() => setTodoModelOpen(true)}>Add data</Button>
+              <Button onClick={openTodoModel}>Add data</Button>
             </EmptyContent>
           </Empty>
         ) : (

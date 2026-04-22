@@ -1,5 +1,6 @@
-import { RiDeleteBinLine, RiEditLine } from '@remixicon/react'
-import { type FC } from 'react'
+import { RiArrowLeftLine, RiDeleteBinLine, RiEditLine } from '@remixicon/react'
+import { Link } from '@tanstack/react-router'
+import type { FC } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import type { ProjectType, TodoType } from '@/types'
@@ -30,6 +31,13 @@ const ProjectHeader: FC<ProjectHeaderPropsType> = ({
       <div className="container mx-auto">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">
+            <Link
+              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3 transition-colors"
+              to="/project"
+            >
+              <RiArrowLeftLine className="size-4" />
+              <span>Projects</span>
+            </Link>
             <div className="flex items-center gap-2 mb-2">
               {project.icon && (
                 <span
