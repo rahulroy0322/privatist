@@ -8,7 +8,16 @@
     "check:fix": "biome check --fix",
     "dev": "vite dev",
     "lint": "biome lint",
-    "start": "vite preview"
+    "start": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "test:unit": "vitest run --dir tests/unit",
+    "test:integration": "vitest run --dir tests/integration",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:install": "playwright install"
   },
   "author": {
     "name": "Rahul Roy",
@@ -52,12 +61,20 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.11",
+    "@playwright/test": "^1.59.1",
     "@tanstack/devtools-vite": "latest",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "^4.1.5",
+    "@vitest/ui": "^4.1.5",
+    "jsdom": "^29.0.2",
     "typescript": "^5.7.2",
-    "vite": "^8.0.0"
+    "vite": "^8.0.0",
+    "vitest": "^4.1.5"
   }
 }
