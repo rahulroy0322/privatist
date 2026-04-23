@@ -5,6 +5,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
+  SidebarMenu,
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar'
@@ -16,16 +17,17 @@ type AppSidebarPropsType = ComponentProps<typeof Sidebar>
 const AppSidebar: FC<AppSidebarPropsType> = ({ ...props }) => (
   <Sidebar {...props}>
     <SidebarHeader>
-      <SidebarMenuItem className="flex gap-2 items-center">
-        <RiFolderLine className="size-8 text-primary" />
-        <span className="text-xl font-bold">Privatist</span>
-      </SidebarMenuItem>
-      {/* <Button type='button' render={ */}
+      <SidebarMenu>
+        <SidebarMenuItem className="flex gap-2 items-center">
+          <RiFolderLine className="size-8 text-primary" />
+          <span className="text-xl font-bold">Privatist</span>
+        </SidebarMenuItem>
+      </SidebarMenu>
       <SearchToggle
         className={'gap-2 w-full'}
         variant={'default'}
       >
-        Serach
+        Search
       </SearchToggle>
     </SidebarHeader>
     <SidebarContent className="gap-0">

@@ -56,6 +56,11 @@ const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
+        name: 'description',
+        content:
+          'Privatist - Your personal productivity companion for managing tasks, projects, and staying organized.',
+      },
+      {
         title: 'Privatist',
       },
     ],

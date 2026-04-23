@@ -8,6 +8,7 @@ type FabPropsType = {
 
 const Fab: FC<FabPropsType> = (props) => (
   <Button
+    aria-label="create new TODO"
     className="fixed bottom-6 right-6"
     size="icon-lg"
     {...props}

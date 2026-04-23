@@ -127,6 +127,7 @@ const TodoItem: FC<TodoItemPropsType> = ({ todo }) => {
       onDoubleClick={handleEdit}
     >
       <Checkbox
+        aria-label={`toggle ${todo.title}`}
         checked={completed}
         className={cn('size-3 rounded-full bg-transparent ring', {
           'text-destructive data-checked:bg-destructive!': priority === 1,
@@ -155,6 +156,7 @@ const TodoItem: FC<TodoItemPropsType> = ({ todo }) => {
         <DropdownMenuTrigger
           render={
             <Button
+              aria-label={`Action ${todo.title}`}
               className="h-7 w-7"
               size="icon"
               variant="ghost"
