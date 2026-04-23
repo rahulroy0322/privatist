@@ -13,3 +13,6 @@ __unconfig*
 todos.json
 tsconfig.tsbuildinfo
 **/routeTree.gen.*
+
+
+pnpm-workspace.yaml
